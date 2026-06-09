@@ -5,6 +5,7 @@
 - PHP 8.1.10 from Laragon
 - MySQL 8.0.30 from Laragon
 - Required PHP extensions: `PDO`, `pdo_mysql`, `mysqli`, `mbstring`, `openssl`, `curl`, `json`, `gd`, `zip`
+- Database host: `127.0.0.2`, port `3306`, user `root`, password empty
 
 ## Run with Laragon
 
