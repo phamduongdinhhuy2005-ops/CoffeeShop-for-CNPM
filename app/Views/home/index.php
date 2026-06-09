@@ -1,6 +1,6 @@
 <?php $title = 'Góc Lặng - Nơi Dừng Chân Giữa Ngày'; ?>
 <section class="relative min-h-[78vh] flex items-center overflow-hidden">
-    <div class="absolute inset-0 bg-cover bg-center scale-105" style="background-image:url('/assets/images/menu-hero.jpg')"></div>
+    <div class="absolute inset-0 bg-cover bg-center scale-105" style="background-image:url('<?= e(asset('assets/images/menu-hero.jpg')) ?>')"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/70"></div>
     <div class="relative max-w-7xl mx-auto px-6 md:px-20 py-24 text-white">
         <p class="uppercase tracking-[.35em] text-primary font-bold text-xs mb-5">Góc Lặng Café</p>

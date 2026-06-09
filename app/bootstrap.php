@@ -47,9 +47,39 @@ function e(mixed $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
+function base_url(): string
+{
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+    $base = preg_replace('#/public/index\.php$#', '', $scriptName) ?? '';
+    $base = preg_replace('#/index\.php$#', '', $base) ?? '';
+
+    return rtrim($base, '/');
+}
+
 function url(string $path = ''): string
 {
-    return '/' . ltrim($path, '/');
+    $base = base_url();
+    $path = '/' . ltrim($path, '/');
+
+    return ($base === '' ? '' : $base) . $path;
+}
+
+function asset(string $path): string
+{
+    return url('/' . ltrim($path, '/'));
+}
+
+function media_url(?string $path, string $fallback = 'assets/images/menu-hero.jpg'): string
+{
+    $path = trim((string) $path);
+    if ($path === '') {
+        return asset($fallback);
+    }
+    if (preg_match('#^(https?:)?//#', $path) === 1 || str_starts_with($path, 'data:')) {
+        return $path;
+    }
+
+    return asset($path);
 }
 
 function redirect(string $path): never

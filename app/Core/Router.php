@@ -26,7 +26,7 @@ final class Router
 
     public function dispatch(string $method, string $uri): void
     {
-        $path = $this->normalize($uri);
+        $path = $this->normalize($this->withoutBasePath($uri));
         $handler = $this->routes[$method][$path] ?? null;
 
         if ($handler === null && $path !== '/') {
@@ -55,5 +55,19 @@ final class Router
     {
         $path = '/' . trim($path, '/');
         return $path === '//' ? '/' : $path;
+    }
+
+    private function withoutBasePath(string $uri): string
+    {
+        $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+        $base = preg_replace('#/public/index\.php$#', '', $scriptName) ?? '';
+        $base = preg_replace('#/index\.php$#', '', $base) ?? '';
+        $base = rtrim($base, '/');
+
+        if ($base !== '' && str_starts_with($uri, $base)) {
+            return substr($uri, strlen($base)) ?: '/';
+        }
+
+        return $uri;
     }
 }

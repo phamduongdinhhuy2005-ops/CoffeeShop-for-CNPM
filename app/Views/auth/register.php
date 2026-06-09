@@ -2,7 +2,7 @@
 <main class="flex items-center justify-center px-4 py-14 bg-[#EDEAE5]">
     <div class="w-full max-w-[880px] grid md:grid-cols-[1.1fr_1fr] rounded-3xl shadow-2xl overflow-hidden border border-primary/10">
         <div class="hidden md:flex flex-col justify-between p-12 relative overflow-hidden bg-slate-custom min-h-[560px]">
-            <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image:url('/assets/images/menu-hero.jpg')"></div>
+            <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image:url('<?= e(asset('assets/images/menu-hero.jpg')) ?>')"></div>
             <div class="relative z-10">
                 <span class="font-bold tracking-[0.28em] uppercase text-xs mb-5 block text-primary">Góc Lặng Café</span>
                 <h2 class="font-serif font-black leading-tight mb-5 text-cream-custom text-5xl">Gia Nhập<br>Cộng Đồng</h2>

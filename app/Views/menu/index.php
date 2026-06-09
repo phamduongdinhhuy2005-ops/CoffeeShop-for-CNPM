@@ -1,6 +1,6 @@
 <?php $title = 'Thực Đơn | Góc Lặng'; ?>
 <section class="relative min-h-[48vh] flex items-center justify-center text-center overflow-hidden">
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('/assets/images/menu-hero.jpg')"></div>
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('<?= e(asset('assets/images/menu-hero.jpg')) ?>')"></div>
     <div class="absolute inset-0 bg-black/55"></div>
     <div class="relative px-6">
         <p class="uppercase tracking-[.35em] text-primary font-bold text-xs mb-4">Seasonal Menu</p>

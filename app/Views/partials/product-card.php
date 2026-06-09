@@ -5,7 +5,7 @@ $salePrice = (!empty($product['is_on_sale']) && $product['discount_percent'] > 0
 ?>
 <article class="group bg-white rounded-xl overflow-hidden border border-primary/10 shadow-sm hover:shadow-xl transition-all">
     <div class="aspect-[4/3] bg-cream-custom/30 overflow-hidden">
-        <img src="<?= e($product['image_url'] ?: '/assets/images/menu-hero.jpg') ?>" alt="<?= e($product['name']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        <img src="<?= e(media_url($product['image_url'] ?? null)) ?>" alt="<?= e($product['name']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
     </div>
     <div class="p-5">
         <div class="text-xs uppercase tracking-[.18em] text-primary font-bold mb-2"><?= e($product['category_name'] ?? '') ?></div>
