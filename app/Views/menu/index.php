@@ -1,27 +1,28 @@
-<?php $title = 'Thực Đơn | Góc Lặng'; ?>
-<section class="relative min-h-[48vh] flex items-center justify-center text-center overflow-hidden">
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('<?= e(asset('assets/images/menu-hero.jpg')) ?>')"></div>
-    <div class="absolute inset-0 bg-black/55"></div>
-    <div class="relative px-6">
-        <p class="uppercase tracking-[.35em] text-primary font-bold text-xs mb-4">Seasonal Menu</p>
-        <h1 class="font-serif text-5xl md:text-7xl font-bold text-white">Thực Đơn</h1>
+<?php $title = 'Thực đơn | Góc Lặng'; ?>
+<section class="border-b border-line bg-ink text-white">
+    <div class="mx-auto grid max-w-7xl gap-8 px-5 py-14 md:grid-cols-[0.9fr_1.1fr] md:px-8">
+        <div>
+            <p class="mb-3 text-sm font-black uppercase tracking-[0.16em] text-primary">Thực đơn</p>
+            <h1 class="text-4xl font-black tracking-tight md:text-6xl">Chọn món nhanh, quản lý dữ liệu rõ.</h1>
+        </div>
+        <p class="self-end text-sm leading-7 text-white/65">Danh sách sản phẩm lấy trực tiếp từ MySQL. Bộ lọc danh mục dùng cùng dữ liệu với phần quản trị để thuận tiện khi nâng cấp.</p>
     </div>
 </section>
 
-<nav class="sticky top-[73px] z-40 bg-background-light/95 backdrop-blur border-b border-primary/10">
-    <div class="max-w-7xl mx-auto px-6 md:px-20 flex gap-1 overflow-x-auto py-3">
-        <a class="px-4 py-2 rounded-full text-sm font-bold <?= empty($categoryId) ? 'bg-primary text-white' : 'text-teal-custom hover:bg-primary/10' ?>" href="<?= url('/menu') ?>">Tất cả <span class="opacity-70">(<?= count($allProducts) ?>)</span></a>
+<nav class="sticky top-20 z-40 border-b border-line bg-paper/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-3 md:px-8">
+        <a class="whitespace-nowrap rounded-2xl px-4 py-2 text-sm font-black <?= empty($categoryId) ? 'bg-primary text-white' : 'text-muted hover:bg-white hover:text-primary' ?>" href="<?= url('/menu') ?>">Tất cả <span class="opacity-70">(<?= count($allProducts) ?>)</span></a>
         <?php foreach ($categories as $category): ?>
             <?php $count = count(array_filter($allProducts, fn ($p) => (int) $p['category_id'] === (int) $category['id'])); ?>
-            <a class="px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap <?= (int) $categoryId === (int) $category['id'] ? 'bg-primary text-white' : 'text-teal-custom hover:bg-primary/10' ?>" href="<?= url('/menu?category_id=' . $category['id']) ?>">
+            <a class="whitespace-nowrap rounded-2xl px-4 py-2 text-sm font-black <?= (int) $categoryId === (int) $category['id'] ? 'bg-primary text-white' : 'text-muted hover:bg-white hover:text-primary' ?>" href="<?= url('/menu?category_id=' . $category['id']) ?>">
                 <?= e($category['name']) ?> <span class="opacity-70">(<?= $count ?>)</span>
             </a>
         <?php endforeach; ?>
     </div>
 </nav>
 
-<section class="max-w-7xl mx-auto px-6 md:px-20 py-14">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<section class="mx-auto max-w-7xl px-5 py-10 md:px-8">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <?php foreach ($products as $product): require BASE_PATH . '/app/Views/partials/product-card.php'; endforeach; ?>
     </div>
 </section>

@@ -1,24 +1,27 @@
-<?php $title = 'Đăng Nhập | Góc Lặng'; ?>
-<main class="flex items-center justify-center px-4 py-14 bg-[#EDEAE5]">
-    <div class="w-full max-w-[880px] grid md:grid-cols-[1.1fr_1fr] rounded-3xl shadow-2xl overflow-hidden border border-primary/10">
-        <div class="hidden md:flex flex-col justify-between p-12 relative overflow-hidden bg-slate-custom min-h-[520px]">
-            <div class="absolute inset-0 opacity-20 bg-cover bg-center" style="background-image:url('<?= e(asset('assets/images/menu-hero.jpg')) ?>')"></div>
-            <div class="relative z-10">
-                <span class="font-bold tracking-[0.28em] uppercase text-xs mb-5 block text-primary">Góc Lặng Café</span>
-                <h2 class="font-serif font-black leading-tight mb-5 text-cream-custom text-5xl">Chào<br>Trở Lại</h2>
-                <p class="text-cream-custom/70 leading-8 text-sm">Đăng nhập để tiếp tục hành trình của bạn cùng Góc Lặng.</p>
+<?php $title = 'Đăng nhập | Góc Lặng'; ?>
+<section class="mx-auto grid min-h-[calc(100dvh-80px)] max-w-7xl items-center gap-8 px-5 py-12 md:grid-cols-[1fr_0.9fr] md:px-8">
+    <div class="hidden overflow-hidden rounded-3xl bg-ink md:block">
+        <div class="min-h-[560px] bg-cover bg-center p-10" style="background-image:linear-gradient(135deg, rgba(37,48,52,.95), rgba(37,48,52,.52)), url('<?= e(asset('assets/images/menu-hero.jpg')) ?>')">
+            <div class="max-w-md text-white">
+                <p class="mb-4 text-sm font-black uppercase tracking-[0.16em] text-primary">Góc Lặng Café</p>
+                <h1 class="text-5xl font-black leading-tight">Chào mừng trở lại.</h1>
+                <p class="mt-5 text-sm leading-7 text-white/70">Đăng nhập để quản lý tài khoản, xem lịch sử đơn hàng hoặc vào khu vực quản trị.</p>
             </div>
         </div>
-        <div class="p-8 md:p-10 bg-white">
-            <h3 class="font-serif font-black text-3xl mb-1">Đăng Nhập</h3>
-            <p class="text-sm mb-7 text-teal-custom">Nhập thông tin tài khoản của bạn bên dưới.</p>
-            <form method="post" action="<?= url('/login') ?>" class="grid gap-4">
-                <?= csrf_field() ?>
-                <input name="email" type="email" class="rounded-full border-primary/25" placeholder="email@gmail.com" required>
-                <input name="password" type="password" class="rounded-full border-primary/25" placeholder="Mật khẩu" required>
-                <button class="w-full py-3.5 rounded-full font-bold text-sm uppercase tracking-widest text-white bg-slate-custom">Đăng Nhập</button>
-            </form>
-            <p class="text-center text-sm mt-5 text-teal-custom">Chưa có tài khoản? <a href="<?= url('/register') ?>" class="font-bold text-primary">Đăng ký ngay</a></p>
-        </div>
     </div>
-</main>
+    <div class="rounded-3xl border border-line bg-white p-6 shadow-sm md:p-9">
+        <h2 class="text-3xl font-black tracking-tight">Đăng nhập</h2>
+        <p class="mt-2 text-sm leading-7 text-muted">Sử dụng tài khoản đã tạo trong hệ thống.</p>
+        <form method="post" action="<?= url('/login') ?>" class="mt-7 grid gap-4">
+            <?= csrf_field() ?>
+            <label class="grid gap-2 text-sm font-bold">Email
+                <input name="email" type="email" class="rounded-2xl border-line" placeholder="admin@goclang.vn" required>
+            </label>
+            <label class="grid gap-2 text-sm font-bold">Mật khẩu
+                <input name="password" type="password" class="rounded-2xl border-line" placeholder="Nhập mật khẩu" required>
+            </label>
+            <button class="mt-2 rounded-2xl bg-ink px-5 py-3.5 text-sm font-black text-white transition hover:bg-primary">Đăng nhập</button>
+        </form>
+        <p class="mt-5 text-center text-sm text-muted">Chưa có tài khoản? <a href="<?= url('/register') ?>" class="font-black text-primary">Đăng ký ngay</a></p>
+    </div>
+</section>

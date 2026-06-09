@@ -1,30 +1,33 @@
-<?php $title = 'Giỏ Hàng | Góc Lặng'; $total = array_sum(array_map(fn($i) => $i['price'] * $i['quantity'], $cart)); ?>
-<section class="max-w-5xl mx-auto px-6 md:px-20 py-12">
-    <h1 class="font-serif text-4xl font-bold mb-8">Giỏ hàng</h1>
+<?php $title = 'Giỏ hàng | Góc Lặng'; $total = array_sum(array_map(fn($i) => $i['price'] * $i['quantity'], $cart)); ?>
+<section class="mx-auto max-w-5xl px-5 py-12 md:px-8">
+    <div class="mb-8">
+        <h1 class="text-4xl font-black tracking-tight">Giỏ hàng</h1>
+        <p class="mt-2 text-sm text-muted">Kiểm tra món đã chọn trước khi thanh toán.</p>
+    </div>
     <?php if (!$cart): ?>
-        <div class="bg-white rounded-xl border border-primary/15 p-10 text-center">
-            <p class="font-semibold mb-4">Giỏ hàng đang trống.</p>
-            <a href="<?= url('/menu') ?>" class="rounded-full bg-primary text-white px-6 py-3 font-bold">Xem thực đơn</a>
+        <div class="rounded-3xl border border-line bg-white p-10 text-center">
+            <p class="mb-5 text-lg font-black">Giỏ hàng đang trống.</p>
+            <a href="<?= url('/menu') ?>" class="inline-flex rounded-2xl bg-primary px-6 py-3 text-sm font-black text-white">Xem thực đơn</a>
         </div>
     <?php else: ?>
-        <div class="bg-white rounded-xl border border-primary/15 overflow-hidden">
+        <div class="overflow-hidden rounded-3xl border border-line bg-white">
             <?php foreach ($cart as $item): ?>
-                <div class="flex gap-4 p-5 border-b border-primary/10">
-                    <img src="<?= e($item['image_url']) ?>" class="w-20 h-20 rounded-lg object-cover" alt="">
-                    <div class="flex-1">
-                        <div class="font-bold"><?= e($item['name']) ?></div>
-                        <div class="text-sm text-teal-custom/70">SL: <?= e($item['quantity']) ?></div>
-                        <div class="text-primary font-bold"><?= number_format($item['price'] * $item['quantity'], 0, ',', '.') ?> đ</div>
+                <div class="grid gap-4 border-b border-line p-5 md:grid-cols-[80px_1fr_auto] md:items-center">
+                    <img src="<?= e(media_url($item['image_url'] ?? null)) ?>" class="h-20 w-20 rounded-2xl object-cover" alt="">
+                    <div>
+                        <div class="font-black"><?= e($item['name']) ?></div>
+                        <div class="mt-1 text-sm text-muted">Số lượng: <?= e($item['quantity']) ?></div>
+                        <div class="mt-2 font-black text-primary"><?= number_format($item['price'] * $item['quantity'], 0, ',', '.') ?> đ</div>
                     </div>
                     <form method="post" action="<?= url('/cart/remove/' . $item['id']) ?>">
                         <?= csrf_field() ?>
-                        <button class="text-red-700 font-bold">Xóa</button>
+                        <button class="rounded-2xl border border-red-200 px-4 py-2 text-sm font-black text-red-700 transition hover:bg-red-50">Xóa</button>
                     </form>
                 </div>
             <?php endforeach; ?>
-            <div class="p-5 flex justify-between items-center">
-                <div class="font-bold text-xl">Tổng: <?= number_format($total, 0, ',', '.') ?> đ</div>
-                <a href="<?= url('/checkout') ?>" class="rounded-full bg-primary text-white px-6 py-3 font-bold">Thanh toán</a>
+            <div class="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
+                <div class="text-2xl font-black">Tổng: <?= number_format($total, 0, ',', '.') ?> đ</div>
+                <a href="<?= url('/checkout') ?>" class="rounded-2xl bg-primary px-6 py-3 text-center text-sm font-black text-white">Thanh toán</a>
             </div>
         </div>
     <?php endif; ?>
