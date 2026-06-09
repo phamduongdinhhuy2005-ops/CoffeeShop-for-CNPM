@@ -1,5 +1,4 @@
 @* FILE: Views/Admin/Index.cshtml *@
-@* FIXED: was incorrectly showing Story/Index content *@
 @model IEnumerable<WebBanHang_2380600870.Models.Order>
 @{
     ViewData["Title"] = "Dashboard";
@@ -8,7 +7,6 @@
     int totalProducts  = ViewBag.TotalProducts  ?? 0;
     int totalUsers     = ViewBag.TotalUsers     ?? 0;
     int totalOrders    = ViewBag.TotalOrders    ?? 0;
-    int totalBookings  = ViewBag.TotalBookings  ?? 0;
     decimal totalRevenue   = ViewBag.TotalRevenue    ?? 0m;
     int pendingOrders  = ViewBag.PendingOrders  ?? 0;
     int processingOrders = ViewBag.ProcessingOrders ?? 0;
@@ -38,10 +36,6 @@
     <div class="dash-stat-card">
         <div class="dash-stat-icon"><span class="material-symbols-outlined">receipt_long</span></div>
         <div><div class="dash-stat-val">@totalOrders</div><div class="dash-stat-label">Đơn hàng</div></div>
-    </div>
-    <div class="dash-stat-card">
-        <div class="dash-stat-icon"><span class="material-symbols-outlined">event_seat</span></div>
-        <div><div class="dash-stat-val">@totalBookings</div><div class="dash-stat-label">Đặt chỗ</div></div>
     </div>
 </div>
 
@@ -128,9 +122,6 @@
             <a asp-controller="Admin" asp-action="Orders" class="dash-quick-link">
                 <span class="material-symbols-outlined">receipt_long</span>Đơn hàng
                 @if (pendingOrders > 0) { <span class="ql-badge alert">@pendingOrders chờ</span> }
-            </a>
-            <a asp-controller="Admin" asp-action="Bookings" class="dash-quick-link">
-                <span class="material-symbols-outlined">event_seat</span>Đặt chỗ<span class="ql-badge">@totalBookings</span>
             </a>
             <a asp-controller="Admin" asp-action="Users" class="dash-quick-link">
                 <span class="material-symbols-outlined">group</span>Người dùng<span class="ql-badge">@totalUsers</span>

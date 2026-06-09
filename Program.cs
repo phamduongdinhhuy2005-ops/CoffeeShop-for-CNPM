@@ -32,32 +32,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// GOOGLE + FACEBOOK OAUTH (optional)
-var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
-var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-var fbAppId = builder.Configuration["Authentication:Facebook:AppId"];
-var fbAppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-
-var authBuilder = builder.Services.AddAuthentication();
-
-if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
-{
-    authBuilder.AddGoogle(options =>
-    {
-        options.ClientId = googleClientId;
-        options.ClientSecret = googleClientSecret;
-    });
-}
-
-if (!string.IsNullOrEmpty(fbAppId) && !string.IsNullOrEmpty(fbAppSecret))
-{
-    authBuilder.AddFacebook(options =>
-    {
-        options.AppId = fbAppId;
-        options.AppSecret = fbAppSecret;
-    });
-}
-
 // COOKIE
 builder.Services.ConfigureApplicationCookie(options =>
 {

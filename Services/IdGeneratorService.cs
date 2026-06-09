@@ -1,6 +1,6 @@
 ﻿// Services/IdGeneratorService.cs
 // Helper tập trung logic tìm ID nhỏ nhất chưa dùng (gap-filling)
-// Dùng cho Products, Categories, Orders, Bookings
+// Dùng cho Products, Categories, Orders
 //
 // FIX EF1002: Thay ExecuteSqlRawAsync($"...{max}") bằng ExecuteSqlAsync($"...{max}")
 // ExecuteSqlAsync nhận FormattableString → EF Core tự parameterize → không có SQL injection.
@@ -62,19 +62,6 @@ namespace WebBanHang_2380600870.Services
             // FIX EF1002: dùng ExecuteSqlAsync (FormattableString) thay ExecuteSqlRawAsync
             await _context.Database.ExecuteSqlAsync(
                 $"DBCC CHECKIDENT ('Orders', RESEED, {max})");
-        }
-
-        // ── Bookings ──────────────────────────────────────────
-        public async Task<int> NextBookingIdAsync()
-            => await FindGapAsync(
-                await _context.Bookings.Select(b => b.Id).ToListAsync());
-
-        public async Task ReseedBookingsAsync()
-        {
-            var max = await _context.Bookings.MaxAsync(b => (int?)b.Id) ?? 0;
-            // FIX EF1002: dùng ExecuteSqlAsync (FormattableString) thay ExecuteSqlRawAsync
-            await _context.Database.ExecuteSqlAsync(
-                $"DBCC CHECKIDENT ('Bookings', RESEED, {max})");
         }
 
         // ── Core algorithm ────────────────────────────────────

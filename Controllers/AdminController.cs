@@ -4,7 +4,6 @@
 //           User vẫn có thể bị xóa khi chỉ có orders Completed/Cancelled (EF Cascade xử lý)
 // Bug 4 — UpdateOrderStatus: Bổ sung check không cho update sang Cancelled bằng dropdown
 //           nếu muốn cancel phải dùng flow riêng; fix logic guard cho Completed/Cancelled
-// Bug 5 — Bookings GET: Giữ filter status qua ViewBag đúng cách, không reset khi có lỗi
 // FIX CS0168: Bỏ biến 'ex' trong tất cả catch blocks không dùng đến
 
 using Microsoft.AspNetCore.Authorization;
@@ -44,12 +43,9 @@ namespace WebBanHang_2380600870.Controllers
 
                 var totalUsers = await _userManager.Users.CountAsync();
                 var totalOrders = await _context.Orders.CountAsync();
-                var totalBookings = await _context.Bookings.CountAsync();
-
                 ViewBag.TotalProducts = totalProducts;
                 ViewBag.TotalUsers = totalUsers;
                 ViewBag.TotalOrders = totalOrders;
-                ViewBag.TotalBookings = totalBookings;
 
                 var totalRevenue = await _context.Orders
                     .Where(o => o.Status == OrderStatus.Completed)
@@ -76,7 +72,7 @@ namespace WebBanHang_2380600870.Controllers
             {
                 TempData["Error"] = "Có lỗi xảy ra khi tải dữ liệu dashboard. Vui lòng thử lại.";
                 ViewBag.TotalProducts = 0; ViewBag.TotalUsers = 0;
-                ViewBag.TotalOrders = 0; ViewBag.TotalBookings = 0;
+                ViewBag.TotalOrders = 0;
                 ViewBag.TotalRevenue = 0m;
                 ViewBag.PendingOrders = 0;
                 ViewBag.ProcessingOrders = 0;
@@ -288,55 +284,5 @@ namespace WebBanHang_2380600870.Controllers
             }
         }
 
-        // ========== QUẢN LÝ ĐẶT CHỖ ==========
-        public async Task<IActionResult> Bookings(string? status = null)
-        {
-            try
-            {
-                var query = _context.Bookings.AsQueryable();
-
-                if (!string.IsNullOrEmpty(status) && Enum.TryParse<BookingStatus>(status, out var s))
-                    query = query.Where(b => b.Status == s);
-
-                var bookings = await query.OrderByDescending(b => b.CreatedAt).ToListAsync();
-
-                // FIX Bug 5: Giữ lại CurrentStatus trong ViewBag để view filter đúng
-                ViewBag.CurrentStatus = status;
-
-                return View(bookings);
-            }
-            catch (Exception)
-            {
-                TempData["Error"] = "Có lỗi xảy ra khi tải danh sách đặt chỗ.";
-                // FIX Bug 5: Khi có lỗi vẫn pass ViewBag.CurrentStatus để tránh null ref trong view
-                ViewBag.CurrentStatus = status;
-                return View(new List<Booking>());
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateBookingStatus(int bookingId, BookingStatus status)
-        {
-            try
-            {
-                var booking = await _context.Bookings.FindAsync(bookingId);
-                if (booking == null)
-                {
-                    TempData["Error"] = "Không tìm thấy đặt chỗ.";
-                    return RedirectToAction(nameof(Bookings));
-                }
-
-                booking.Status = status;
-                await _context.SaveChangesAsync();
-                TempData["Success"] = $"Đã cập nhật trạng thái đặt chỗ của {booking.FullName}.";
-                return RedirectToAction(nameof(Bookings));
-            }
-            catch (Exception)
-            {
-                TempData["Error"] = "Có lỗi xảy ra khi cập nhật trạng thái đặt chỗ.";
-                return RedirectToAction(nameof(Bookings));
-            }
-        }
     }
 }

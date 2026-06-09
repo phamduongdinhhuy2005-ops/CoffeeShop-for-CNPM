@@ -5,13 +5,6 @@
 // 2. Order.PaymentMethod — lưu phương thức thanh toán
 // 3. AppUser.CreatedAt dùng UtcNow
 // 4. Subscriber unique index
-// 5. Booking.Phone regex validate SĐT Việt Nam
-// [MỚI] 6. Booking.UserId (nullable FK → AppUser) — liên kết booking với tài khoản
-// [MỚI] 7. AppUser.Bookings navigation property
-// [MỚI] 8. OnModelCreating: cấu hình Booking → AppUser (SetNull on delete)
-// SAU KHI THAY FILE NÀY: chạy migration
-//   dotnet ef migrations add AddBookingUserId
-//   dotnet ef database update
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -103,9 +96,6 @@ namespace WebBanHang_2380600870.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public List<Order>? Orders { get; set; }
-
-        // [MỚI] Navigation property — để query bookings của user này
-        public List<Booking>? Bookings { get; set; }
     }
 
     // ===================== ORDER =====================
@@ -165,53 +155,6 @@ namespace WebBanHang_2380600870.Models
         public string? ItemNote { get; set; }
     }
 
-    // ===================== BOOKING =====================
-    public enum BookingStatus { Pending, Confirmed, Cancelled }
-
-    public class Booking
-    {
-        public int Id { get; set; }
-
-        // [MỚI] Liên kết booking với tài khoản user
-        // Nullable: khách không đăng nhập vẫn đặt được, khi đã login sẽ có UserId
-        // Khi user bị xóa: UserId sẽ thành NULL (SetNull), booking vẫn giữ lại
-        public string? UserId { get; set; }
-        public AppUser? User { get; set; }
-
-        [Required(ErrorMessage = "Họ tên không được để trống")]
-        [StringLength(100)]
-        public string FullName { get; set; } = null!;
-
-        [Required(ErrorMessage = "Email không được để trống")]
-        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
-        [StringLength(256)]
-        public string Email { get; set; } = null!;
-
-        [Required(ErrorMessage = "Số điện thoại không được để trống")]
-        // FIX: Validate SĐT Việt Nam (0xxx hoặc +84xxx)
-        [RegularExpression(@"^(0|\+84)[3-9][0-9]{8}$", ErrorMessage = "Số điện thoại Việt Nam không hợp lệ (VD: 0912345678)")]
-        public string Phone { get; set; } = null!;
-
-        [Required(ErrorMessage = "Ngày đặt không được để trống")]
-        public DateTime BookingDate { get; set; }
-
-        [Required(ErrorMessage = "Giờ đến không được để trống")]
-        public string BookingTime { get; set; } = null!;
-
-        [Range(1, 20, ErrorMessage = "Số khách từ 1 đến 20")]
-        public int GuestCount { get; set; } = 1;
-
-        [StringLength(100)]
-        public string? Occasion { get; set; }
-
-        [StringLength(500)]
-        public string? SpecialRequest { get; set; }
-
-        // FIX: Dùng UtcNow
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public BookingStatus Status { get; set; } = BookingStatus.Pending;
-    }
-
     // ===================== DB CONTEXT =====================
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
@@ -221,7 +164,6 @@ namespace WebBanHang_2380600870.Models
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<ProductImage> ProductImages { get; set; } = null!;
-        public DbSet<Booking> Bookings { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public DbSet<Subscriber> Subscribers { get; set; } = null!;
@@ -263,14 +205,6 @@ namespace WebBanHang_2380600870.Models
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            // [MỚI] Booking → AppUser: nullable FK, xóa user thì UserId thành NULL
-            modelBuilder.Entity<Booking>()
-                .HasOne(b => b.User)
-                .WithMany(u => u.Bookings)
-                .HasForeignKey(b => b.UserId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
 
             // FIX: Unique index cho Subscriber.Email
             modelBuilder.Entity<Subscriber>()

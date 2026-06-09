@@ -141,12 +141,7 @@
                 </a>
                 <nav class="hidden md:flex flex-1 justify-center gap-10">
                     <a asp-controller="Menu" asp-action="Index" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Thực Đơn</a>
-                    <a asp-controller="Story" asp-action="Index" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Câu Chuyện</a>
-                    @* FIX Bug 1: Admin không thấy Đặt Chỗ và Tìm Chúng Mình trên nav *@
-                    @if (!User.IsInRole("Admin"))
-                    {
-                        <a asp-controller="Booking" asp-action="Index" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Đặt Chỗ</a>
-                    }
+                    @* Navigation kept focused on the product/catalog workflow used in COS340 labs. *@
                     <a asp-controller="Home" asp-action="Privacy" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Chính Sách</a>
                     @* FIX Bug 1: Ẩn "Tìm Chúng Mình" với Admin — Admin không dùng footer location *@
                     @if (!User.IsInRole("Admin"))
@@ -210,14 +205,6 @@
                                                 <span class="material-symbols-outlined text-primary" style="font-size:18px;">receipt_long</span>
                                                 Lịch Sử Đặt Hàng
                                             </a>
-                                            <a asp-controller="Booking" asp-action="MyBookings" class="flex items-center gap-3 px-5 py-3 text-sm text-teal-custom hover:text-primary transition-colors hover:bg-primary/5">
-                                                <span class="material-symbols-outlined text-primary" style="font-size:18px;">event_seat</span>
-                                                Lịch Đặt Chỗ
-                                            </a>
-                                            <a asp-controller="Booking" asp-action="Index" class="flex items-center gap-3 px-5 py-3 text-sm text-teal-custom hover:text-primary transition-colors hover:bg-primary/5">
-                                                <span class="material-symbols-outlined text-primary" style="font-size:18px;">add_circle</span>
-                                                Đặt Chỗ Mới
-                                            </a>
                                         }
                                     </div>
                                     <div class="border-t py-2" style="border-color:rgba(162,123,92,0.15);">
@@ -271,12 +258,7 @@
 
                 <nav class="hidden md:flex flex-1 justify-center gap-10">
                     <a asp-controller="Menu" asp-action="Index" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Thực Đơn</a>
-                    <a asp-controller="Story" asp-action="Index" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Câu Chuyện</a>
-                    @* FIX Bug 1: Ẩn Đặt Chỗ với Admin *@
-                    @if (!User.IsInRole("Admin"))
-                    {
-                        <a asp-controller="Booking" asp-action="Index" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Đặt Chỗ</a>
-                    }
+                    @* Navigation kept focused on the product/catalog workflow used in COS340 labs. *@
                     <a asp-controller="Home" asp-action="Privacy" class="text-teal-custom hover:text-primary transition-colors text-sm font-semibold uppercase tracking-wider">Chính Sách</a>
                     @* FIX Bug 1: Ẩn "Tìm Chúng Mình" với Admin *@
                     @if (!User.IsInRole("Admin"))
@@ -344,14 +326,6 @@
                                                 <span class="material-symbols-outlined text-primary" style="font-size:18px;">receipt_long</span>
                                                 Lịch Sử Đặt Hàng
                                             </a>
-                                            <a asp-controller="Booking" asp-action="MyBookings" class="flex items-center gap-3 px-5 py-3 text-sm text-teal-custom hover:text-primary transition-colors hover:bg-primary/5">
-                                                <span class="material-symbols-outlined text-primary" style="font-size:18px;">event_seat</span>
-                                                Lịch Đặt Chỗ
-                                            </a>
-                                            <a asp-controller="Booking" asp-action="Index" class="flex items-center gap-3 px-5 py-3 text-sm text-teal-custom hover:text-primary transition-colors hover:bg-primary/5">
-                                                <span class="material-symbols-outlined text-primary" style="font-size:18px;">add_circle</span>
-                                                Đặt Chỗ Mới
-                                            </a>
                                         }
                                     </div>
                                     <div class="border-t py-2" style="border-color:rgba(162,123,92,0.15);">
@@ -406,10 +380,7 @@
                         <div>
                             <h4 class="font-bold text-sm uppercase tracking-widest text-primary mb-6">Khám Phá</h4>
                             <ul class="space-y-3 text-sm">
-                                <li><a asp-controller="Story" asp-action="Index" class="text-cream-custom/60 hover:text-primary transition-colors">Câu Chuyện Của Chúng Mình</a></li>
                                 <li><a asp-controller="Menu" asp-action="Index" class="text-cream-custom/60 hover:text-primary transition-colors">Thực Đơn</a></li>
-                                <li><a asp-controller="Booking" asp-action="Index" class="text-cream-custom/60 hover:text-primary transition-colors">Đặt Chỗ</a></li>
-                                <li><a asp-controller="GiftCard" asp-action="Index" class="text-cream-custom/60 hover:text-primary transition-colors">Gift Card</a></li>
                             </ul>
                         </div>
                         <div>
