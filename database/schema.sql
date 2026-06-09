@@ -61,7 +61,6 @@ CREATE TABLE order_details (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     unit_price DECIMAL(18,2) NOT NULL,
-    item_note VARCHAR(500) NULL,
     CONSTRAINT fk_order_details_orders
         FOREIGN KEY (order_id) REFERENCES orders(id)
         ON DELETE CASCADE,
@@ -71,19 +70,19 @@ CREATE TABLE order_details (
 ) ENGINE=InnoDB;
 
 INSERT INTO users (full_name, email, password_hash, role) VALUES
-('Quan Tri Vien', 'admin@goclang.vn', '$2y$10$D.zO.6BH2yQMNHnmFwqR6.dSZyjAUhsyHgzNAEscj9ORKCs2gTjV6', 'admin');
+('Quản trị viên', 'admin@goclang.vn', '$2y$10$D.zO.6BH2yQMNHnmFwqR6.dSZyjAUhsyHgzNAEscj9ORKCs2gTjV6', 'admin');
 
 INSERT INTO categories (id, name) VALUES
-(1, 'Trà & Thảo Mộc'),
-(2, 'Cà Phê'),
-(3, 'Bánh Sáng');
+(1, 'Trà & Thảo mộc'),
+(2, 'Cà phê'),
+(3, 'Bánh sáng');
 
 INSERT INTO products (category_id, name, price, description, image_url, is_on_sale, discount_percent) VALUES
 (1, 'Trà Hoa Cúc Mật Ong', 55000, 'Hoa cúc hữu cơ dịu nhẹ, pha cùng mật ong rừng địa phương và một chút vani.', '/assets/images/1ab0405c-6c09-4f79-9609-42a71a350846.webp', 0, NULL),
 (1, 'Trà Hoa Atiso Đỏ', 58000, 'Cánh atiso đỏ giàu vitamin, kết hợp hoa hồng Bulgaria khô cho hương thơm thanh nhẹ.', '/assets/images/1e886a73-0899-4634-9dd1-42972e1397b2.jpg', 0, NULL),
 (1, 'Earl Grey Hoàng Gia', 55000, 'Trà đen thượng hạng ướp tinh dầu bergamot và cánh hoa ngô xanh.', '/assets/images/26f9dd67-8c9a-45fe-95d5-f050b8256972.jpg', 1, 10),
 (2, 'Cà Phê Trứng Hà Nội', 65000, 'Robusta đậm đà, phủ lớp lòng đỏ trứng đánh bông cùng sữa đặc.', '/assets/images/6ff62bb2-36b6-46c5-9458-9c4503d60b2a.jpg', 0, NULL),
-(2, 'Espresso Truyền Thống', 35000, 'Blend Arabica & Robusta, chiết xuất chuẩn mực với crema vàng óng.', '/assets/images/75924f1f-9ab3-493a-9bba-13f1e439d333.jpg', 0, NULL),
+(2, 'Espresso Truyền Thống', 35000, 'Blend Arabica và Robusta, chiết xuất chuẩn mực với crema vàng óng.', '/assets/images/75924f1f-9ab3-493a-9bba-13f1e439d333.jpg', 0, NULL),
 (2, 'Cold Brew 18 Giờ', 50000, 'Ủ lạnh suốt 18 tiếng, vị mượt mà, ít đắng, thoảng hương sô-cô-la.', '/assets/images/cd5137b7-85ec-44f9-bd88-a9c911185a9a.jpg', 1, 15),
 (2, 'Latte Nhung', 45000, 'Sữa tươi đánh bọt mịn như nhung, rót trên hai shot espresso.', '/assets/images/cf792b2e-4614-4152-afc8-d109303df310.jpg', 0, NULL),
 (3, 'Croissant Hạnh Nhân', 38000, 'Nướng hai lần, nhân kem hạnh nhân, rắc hạnh nhân lát lên trên.', '/assets/images/menu-hero.jpg', 0, NULL),

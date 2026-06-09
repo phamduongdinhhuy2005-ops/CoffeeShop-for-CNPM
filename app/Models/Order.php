@@ -24,15 +24,14 @@ final class Order extends Model
             $orderId = (int) $this->db->lastInsertId();
 
             $detail = $this->db->prepare('INSERT INTO order_details
-                (order_id, product_id, quantity, unit_price, item_note)
-                VALUES (?, ?, ?, ?, ?)');
+                (order_id, product_id, quantity, unit_price)
+                VALUES (?, ?, ?, ?)');
             foreach ($cart as $item) {
                 $detail->execute([
                     $orderId,
                     $item['id'],
                     $item['quantity'],
                     $item['price'],
-                    $item['note'] ?? '',
                 ]);
             }
             $this->db->commit();
