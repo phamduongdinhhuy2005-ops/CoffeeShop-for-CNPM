@@ -1,0 +1,157 @@
+@* FILE: Views/Admin/Index.cshtml *@
+@* FIXED: was incorrectly showing Story/Index content *@
+@model IEnumerable<WebBanHang_2380600870.Models.Order>
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["ActivePage"] = "Dashboard";
+    int totalProducts  = ViewBag.TotalProducts  ?? 0;
+    int totalUsers     = ViewBag.TotalUsers     ?? 0;
+    int totalOrders    = ViewBag.TotalOrders    ?? 0;
+    int totalBookings  = ViewBag.TotalBookings  ?? 0;
+    decimal totalRevenue   = ViewBag.TotalRevenue    ?? 0m;
+    int pendingOrders  = ViewBag.PendingOrders  ?? 0;
+    int processingOrders = ViewBag.ProcessingOrders ?? 0;
+}
+
+@if (TempData["Error"] != null)
+{
+    <div id="hcToast" style="position:fixed;top:1.5rem;right:1.5rem;z-index:9999;background:#fff;border:1px solid rgba(220,68,68,.3);border-left:4px solid #dc2626;border-radius:12px;padding:1rem 1.25rem;display:flex;align-items:center;gap:.75rem;box-shadow:0 8px 24px rgba(44,54,57,.12);animation:toastIn .3s ease;">
+        <span class="material-symbols-outlined" style="color:#dc2626;font-size:22px;">error</span>
+        <span style="font-size:.875rem;font-weight:500;color:#2c3639;">@TempData["Error"]</span>
+        <button onclick="document.getElementById('hcToast').remove()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:#94a3b8;" class="material-symbols-outlined">close</button>
+    </div>
+}
+
+
+
+<!-- Stat cards -->
+<div class="dash-stat-grid">
+    <div class="dash-stat-card">
+        <div class="dash-stat-icon"><span class="material-symbols-outlined">inventory_2</span></div>
+        <div><div class="dash-stat-val">@totalProducts</div><div class="dash-stat-label">Sản phẩm</div></div>
+    </div>
+    <div class="dash-stat-card">
+        <div class="dash-stat-icon"><span class="material-symbols-outlined">group</span></div>
+        <div><div class="dash-stat-val">@totalUsers</div><div class="dash-stat-label">Người dùng</div></div>
+    </div>
+    <div class="dash-stat-card">
+        <div class="dash-stat-icon"><span class="material-symbols-outlined">receipt_long</span></div>
+        <div><div class="dash-stat-val">@totalOrders</div><div class="dash-stat-label">Đơn hàng</div></div>
+    </div>
+    <div class="dash-stat-card">
+        <div class="dash-stat-icon"><span class="material-symbols-outlined">event_seat</span></div>
+        <div><div class="dash-stat-val">@totalBookings</div><div class="dash-stat-label">Đặt chỗ</div></div>
+    </div>
+</div>
+
+<!-- Revenue banner -->
+<div class="dash-stat-card dash-revenue" style="margin-bottom:1.25rem;">
+    <div class="dash-stat-icon"><span class="material-symbols-outlined">payments</span></div>
+    <div>
+        <div class="dash-stat-val">@totalRevenue.ToString("N0") ₫</div>
+        <div class="dash-stat-label">Tổng doanh thu · đơn hoàn thành</div>
+    </div>
+</div>
+
+@if (pendingOrders > 0)
+{
+    <div class="dash-alert">
+        <span class="material-symbols-outlined">notification_important</span>
+        Có <strong>@pendingOrders đơn hàng</strong> đang chờ xử lý
+        @if (processingOrders > 0) { <span>và <strong>@processingOrders đơn</strong> đang xử lý.</span> }
+        <a asp-controller="Admin" asp-action="Orders" asp-route-status="Pending"
+           style="margin-left:auto;color:#d97706;font-weight:700;text-decoration:none;white-space:nowrap;">Xem ngay →</a>
+    </div>
+}
+
+<div class="dash-body">
+    <!-- Recent orders -->
+    <div class="dash-panel">
+        <div class="dash-panel-title">
+            <span class="material-symbols-outlined">schedule</span>Đơn Hàng Gần Đây
+        </div>
+        @if (!Model.Any())
+        {
+            <div class="no-orders">
+                <span class="material-symbols-outlined">inbox</span>Chưa có đơn hàng nào
+            </div>
+        }
+        else
+        {
+            @foreach (var order in Model)
+            {
+                var bc = order.Status switch {
+                    WebBanHang_2380600870.Models.OrderStatus.Pending    => "pending",
+                    WebBanHang_2380600870.Models.OrderStatus.Confirmed  => "confirmed",
+                    WebBanHang_2380600870.Models.OrderStatus.Processing => "processing",
+                    WebBanHang_2380600870.Models.OrderStatus.Ready      => "ready",
+                    WebBanHang_2380600870.Models.OrderStatus.Completed  => "completed",
+                    WebBanHang_2380600870.Models.OrderStatus.Cancelled  => "cancelled",
+                    _ => "pending"
+                };
+                var sl = order.Status switch {
+                    WebBanHang_2380600870.Models.OrderStatus.Pending    => "Chờ xử lý",
+                    WebBanHang_2380600870.Models.OrderStatus.Confirmed  => "Đã xác nhận",
+                    WebBanHang_2380600870.Models.OrderStatus.Processing => "Đang xử lý",
+                    WebBanHang_2380600870.Models.OrderStatus.Ready      => "Sẵn sàng",
+                    WebBanHang_2380600870.Models.OrderStatus.Completed  => "Hoàn thành",
+                    WebBanHang_2380600870.Models.OrderStatus.Cancelled  => "Đã huỷ",
+                    _ => "Không rõ"
+                };
+                <div class="dash-order-row">
+                    <div class="dash-order-id">#@order.Id</div>
+                    <div class="dash-order-user">
+                        <div class="dash-order-name">@(order.User?.FullName ?? order.User?.Email ?? "Khách")</div>
+                        <div class="dash-order-date">@order.OrderDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</div>
+                    </div>
+                    <div class="dash-order-amount">@order.TotalAmount.ToString("N0") ₫</div>
+                    <span class="dash-badge @bc">@sl</span>
+                </div>
+            }
+            <div style="margin-top:1rem;text-align:right;">
+                <a asp-controller="Admin" asp-action="Orders" style="font-size:.78rem;font-weight:600;color:#a27b5c;text-decoration:none;">Xem tất cả →</a>
+            </div>
+        }
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+        <div class="dash-panel" style="margin-bottom:1.25rem;">
+            <div class="dash-panel-title"><span class="material-symbols-outlined">flash_on</span>Truy Cập Nhanh</div>
+            <a asp-controller="Product" asp-action="Index" class="dash-quick-link">
+                <span class="material-symbols-outlined">inventory_2</span>Sản phẩm<span class="ql-badge">@totalProducts</span>
+            </a>
+            <a asp-controller="Category" asp-action="Index" class="dash-quick-link">
+                <span class="material-symbols-outlined">category</span>Danh mục
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="dash-quick-link">
+                <span class="material-symbols-outlined">receipt_long</span>Đơn hàng
+                @if (pendingOrders > 0) { <span class="ql-badge alert">@pendingOrders chờ</span> }
+            </a>
+            <a asp-controller="Admin" asp-action="Bookings" class="dash-quick-link">
+                <span class="material-symbols-outlined">event_seat</span>Đặt chỗ<span class="ql-badge">@totalBookings</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="dash-quick-link">
+                <span class="material-symbols-outlined">group</span>Người dùng<span class="ql-badge">@totalUsers</span>
+            </a>
+            <a asp-controller="Admin" asp-action="CategoryOptions" class="dash-quick-link">
+                <span class="material-symbols-outlined">tune</span>Tùy chọn sản phẩm
+            </a>
+        </div>
+        <div class="dash-panel">
+            <div class="dash-panel-title"><span class="material-symbols-outlined">donut_small</span>Trạng Thái</div>
+            <div style="display:flex;flex-direction:column;gap:.6rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:.82rem;">
+                    <span style="color:#3f4e4f;">Chờ xử lý</span><span class="dash-badge pending">@pendingOrders</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:.82rem;">
+                    <span style="color:#3f4e4f;">Đang xử lý</span><span class="dash-badge processing">@processingOrders</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:.82rem;">
+                    <span style="color:#3f4e4f;">Tổng đơn</span><span class="dash-badge confirmed">@totalOrders</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
